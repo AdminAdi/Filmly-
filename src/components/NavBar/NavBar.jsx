@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AppBar, IconButton, Toolbar, Drawer, Button, Avatar, useMediaQuery } from '@mui/material';
 import { Menu, AccountCircle, Brightness4, Brightness7 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
@@ -9,6 +9,11 @@ import Search from '../Search/Search';
 import { fetchToken, createSessionId, moviesApi } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, userSelector } from '../../features/auth';
+import { ColorModeContext } from '../../utils/ToggleColorMode';
+
+
+
+
 const NavBar = () => {
     const classes = useStyles();
     const isMobile = useMediaQuery('(max-width:600px)');
@@ -18,6 +23,10 @@ const NavBar = () => {
     const dispatch = useDispatch();
     const token = localStorage.getItem('request_token');
     const sessionIdFromLocalStorage = localStorage.getItem('session_id');
+    const colorMode = useContext(ColorModeContext);
+
+
+
     useEffect(() => {
         const logInUser = async () => {
             if (token) {
@@ -48,7 +57,7 @@ const NavBar = () => {
                             <Menu />
                         </IconButton>
                     )}
-                    <IconButton color='inherit' sx={{ ml: 1 }} onClick={() => { }}>
+                    <IconButton color='inherit' sx={{ ml: 1 }} onClick={colorMode.toggleColorMode}>
                         {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
                     </IconButton>
                     {!isMobile && <Search />}
@@ -70,7 +79,7 @@ const NavBar = () => {
                                 <Avatar
                                     style={{ width: 30, height: 30 }}
                                     alt='Profile Image'
-                                    src='https://c8.alamy.com/comp/2G7FT9E/default-avatar-photo-placeholder-grey-profile-picture-icon-man-in-t-shirt-2G7FT9E.jpg'
+                                    src={`https://www.themoviedb.org/t/p/w64_and_h64_face${user?.avatar?.tmdb?.avatar_path}`}
                                 />
                             </Button>
                         )}
